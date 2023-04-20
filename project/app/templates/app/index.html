@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js'></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+        <script>
+          (function ($) {
+              $.fn.countTo = function (options) {
+                  options = options || {};
+                  
+                  return $(this).each(function () {
+                      // set options for current element
+                      var settings = $.extend({}, $.fn.countTo.defaults, {
+                          from:            $(this).data('from'),
+                          to:              $(this).data('to'),
+                          speed:           $(this).data('speed'),
+                          refreshInterval: $(this).data('refresh-interval'),
+                          decimals:        $(this).data('decimals')
+                      }, options);
+                      
+                      // how many times to update the value, and how much to increment the value on each update
+                      var loops = Math.ceil(settings.speed / settings.refreshInterval),
+                          increment = (settings.to - settings.from) / loops;
+                      
+                      // references & variables that will change with each update
+                      var self = this,
+                          $self = $(this),
+                          loopCount = 0,
+                          value = settings.from,
+                          data = $self.data('countTo') || {};
+                      
+                      $self.data('countTo', data);
+                      
+                      // if an existing interval can be found, clear it first
+                      if (data.interval) {
+                          clearInterval(data.interval);
+                      }
+                      data.interval = setInterval(updateTimer, settings.refreshInterval);
+                      
+                      // initialize the element with the starting value
+                      render(value);
+                      
+                      function updateTimer() {
+                          value += increment;
+                          loopCount++;
+                          
+                          render(value);
+                          
+                          if (typeof(settings.onUpdate) == 'function') {
+                              settings.onUpdate.call(self, value);
+                          }
+                          
+                          if (loopCount >= loops) {
+                              // remove the interval
+                              $self.removeData('countTo');
+                              clearInterval(data.interval);
+                              value = settings.to;
+                              
+                              if (typeof(settings.onComplete) == 'function') {
+                                  settings.onComplete.call(self, value);
+                              }
+                          }
+                      }
+                      
+                      function render(value) {
+                          var formattedValue = settings.formatter.call(self, value, settings);
+                          $self.html(formattedValue);
+                      }
+                  });
+              };
+              
+              $.fn.countTo.defaults = {
+                  from: 0,               // the number the element should start at
+                  to: 0,                 // the number the element should end at
+                  speed: 1000,           // how long it should take to count between the target numbers
+                  refreshInterval: 100,  // how often the element should be updated
+                  decimals: 0,           // the number of decimal places to show
+                  formatter: formatter,  // handler for formatting the value before rendering
+                  onUpdate: null,        // callback method for every time the element is updated
+                  onComplete: null       // callback method for when the element finishes updating
+              };
+              
+              function formatter(value, settings) {
+                  return value.toFixed(settings.decimals);
+              }
+          }(jQuery));
+          
+          jQuery(function ($) {
+            // custom formatting example
+            $('.count-number').data('countToOptions', {
+              formatter: function (value, options) {
+                return value.toFixed(options.decimals).replace(/\B(?=(?:\d{3})+(?!\d))/g, ',');
+              }
+            });
+            
+            // start all the timers
+            $('.timer').each(count);  
+            
+            function count(options) {
+              var $this = $(this);
+              options = $.extend({}, options || {}, $this.data('countToOptions') || {});
+              $this.countTo(options);
+            }
+          });
+      </script>
+      </head>
+    <body>
+    <div>
+        <div>
+        <a href="/" class="logo" target="_blank">
+        <div class="zoom fixed-top">
+            <img src="static/logo.png" alt="">
+        </a>
+        </div>
+          <input class="menu-icon" type="checkbox" id="menu-icon" name="menu-icon"/>
+          <label for="menu-icon"></label>
+          <nav class="nav"> 		
+              <ul class="pt-5">
+                  <li><a href="#">Work</a></li>
+                  <li><a href="#">Studio</a></li>
+                  <li><a href="#">News</a></li>
+                  <li><a href="#">Contact</a></li>
+              </ul>
+          </nav>
+          
+          <section class="test1 title_head">
+                <h1 class="mb-0 heading_h1">AgencyFluent</h1>
+                <div class="wrapper-2">
+                <h4 class="mb-0 heading_h4 typing-demo ">Marketing Made Fluent.</h4>
+                </div>
+                <div class="spacer-big">
+                </div>
+                {% comment %} <img src=dot.gif height=500 width=1> {% endcomment %}
+          </section>  
+          <section class="about_section">  
+            <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+            <h1 class="about_h1">Our Services</h1>
+            <section class="hero-section">
+                
+              <div class="card-grid">
+                <a class="card" href="#">
+                  <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557177324-56c542165309?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80)"></div>
+                  <div class="card__content">
+                    <p class="card__category">Category</p>
+                    <h3 class="card__heading">Example Card Heading</h3>
+                  </div>
+                </a>
+                <a class="card" href="#">
+                  <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557187666-4fd70cf76254?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)"></div>
+                  <div class="card__content">
+                    <p class="card__category">Category</p>
+                    <h3 class="card__heading">Example Card Heading</h3>
+                  </div>
+                </a>
+                <a class="card" href="#">
+                  <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1556680262-9990363a3e6d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)"></div>
+                  <div class="card__content">
+                    <p class="card__category">Category</p>
+                    <h3 class="card__heading">Example Card Heading</h3>
+                  </div>
+                </li>
+                <a class="card" href="#">
+                  <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557004396-66e4174d7bf6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)"></div>
+                  <div class="card__content">
+                    <p class="card__category">Category</p>
+                    <h3 class="card__heading">Example Card Heading</h3>
+                  </div>
+                </a>
+              <div>
+            </section>
+          </section>
+          <section class="why_section">
+            
+            <h1 class="about_h1">Why You Should Work With Us</h1>
+            <div class="spacer-small ">
+            </div>
+              <div class="wrapper">
+                <div class="counter ">
+                  <h2 class="timer count-title count-number" data-to="300" data-speed="3000"></h2>
+                   <p class="count-text ">SomeText GoesHere</p>
+                </div>
+            
+                <div class="counter ">
+                 
+                  <h2 class="timer count-title count-number" data-to="1700" data-speed="3000"></h2>
+                  <p class="count-text ">SomeText GoesHere</p>
+                </div>
+            
+                <div class="counter">
+                  
+                  <h2 class="timer count-title count-number" data-to="11900" data-speed="3000"></h2>
+                  <p class="count-text ">SomeText GoesHere</p>
+                </div>
+            </div>
+            
+          </section>
+          <section class="hire-us">
+            <div class="box">
+              <span></span>
+              <div class="content">
+                <h2>Hover me!</h2>
+              </div>
+            </div>
+          </section>
+        </div>
+        
+    </body>
+       
+    <style>
+      .box {
+        position: relative;
+        width: 640px;
+        height: 440px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.5s;
+        z-index: 1;
+       }
+       
+       .box::before {
+        content: ' ';
+        position: absolute;
+        top: 0;
+        left: 50px;
+        width: 50%;
+        height: 100%;
+        text-decoration: none;
+        background: #fff;
+        border-radius: 8px;
+        transform: skewX(15deg);
+        transition: 0.5s;
+       }
+       
+       .box::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50;
+        width: 50%;
+        height: 100%;
+        background: #fff;
+        border-radius: 8px;
+        transform: skewX(15deg);
+        transition: 0.5s;
+        filter: blur(30px);
+       }
+       
+       .box:hover:before,
+       .box:hover:after {
+        transform: skewX(0deg) scaleX(1.3);
+       }
+       
+       .box:before,
+       .box:after {
+        background: linear-gradient(315deg, #ffbc00, #ff0058)
+       }
+       
+       .box span {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 5;
+        pointer-events: none;
+       }
+       
+       .box span::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        transition: 0.1s;
+        animation: animate 2s ease-in-out infinite;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08)
+       }
+       
+       .box span::before {
+        top: -40px;
+        left: 40px;
+        width: 50px;
+        height: 50px;
+        opacity: 1;
+       }
+       
+       .box span::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        transition: 0.5s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        animation-delay: -1s;
+       }
+       
+       .box span:after {
+        bottom: -40px;
+        right: 40px;
+        width: 50px;
+        height: 50px;
+        opacity: 1;
+       }
+       
+       .box .content {
+        position: relative;
+        width: 300px;
+        height: 400px;
+        align-items:center;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        z-index: 1;
+        transform: 0.5s;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+       }
+       
+       .box .content h2 {
+        font-size: 20px;
+        color: #fff;
+        margin-bottom: 10px;
+       }
+      
+      .wrapper {position: relative;}
+      .counter { background-color: #ffffff; padding: 20px 0; border-radius: 5px;}
+      .count-title { font-size: 8vw; font-weight: normal;  margin-top: 10px; margin-bottom: 0; text-align: center; }
+      .count-text { font-size: 2.5vw; font-weight: normal;  margin-top: 10px; margin-bottom: 0; text-align: center; }
+      .fa-2x { margin: 0 auto; float: none; display: table; color: #4ad1e5; }    
+      @import url(//fonts.googleapis.com/css?family=Montserrat:400,700);
+      .why_section{
+        align:center;
+      }
+      
+      .counter_font {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+        font-size:11vw;
+        
+      }
+      .col-md-4 {
+        text-align: center;
+        padding-bottom: 50px;
+        align-items:center;
+      }
+      
+      .col-md-4:last-child {
+        border-right: 0px solid black;
+      }
+      
+      .counter {
+        animation-duration: 3s;
+        animation-delay: 4s;
+      }
+      
+      i {
+        font-size: 20px !important;
+      }
+      
+      @media (max-width: 991px) {
+        .col-md-4 {
+          border-right: 0px dashed black;
+          border-bottom: 0px dashed black;
+          width: 50%;
+          margin: auto auto;
+        }
+        
+        .col-md-4:last-child {
+          border-bottom: 0px dashed black;
+        }
+      }
+      @media (min-width: 540px) {
+        .col-md-4 {
+          width: 25%;
+          margin: auto auto;
+        }
+        }  
+      .spacer-big{
+            height:400px;
+        }
+        .spacer-small{
+          height:90px;
+      }
+        .test1{
+            margin: -100px 0px 0px 0px;
+        }
+        .heading_h4{
+            font-family: 'Montserrat', sans-serif;
+            margin-top: 0px;
+            font-size: 2.5vw;
+            color: #333333;
+            text-align: center;
+            padding-bottom:0px;
+        }
+        .heading_h1{
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            padding-top: 400px;
+            font-size: 10vw;
+            line-height: 1;
+            margin-bottom: 0px;
+            color: #333333;
+            text-align: center;
+            -webkit-text-stroke: 2px #333333;
+            text-stroke: 2px #ffeba7;
+            -webkit-text-fill-color: transparent;
+            text-fill-color: transparent;
+            color: transparent;
+          }
+          .about_h1{
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            padding-top: 15px;
+            font-size: 6vw;
+            line-height: 1;
+            margin-bottom:-25px;
+            color: #333333;
+            text-align: center;
+            -webkit-text-stroke: 2px #333333;
+            text-stroke: 2px #ffeba7;
+            -webkit-text-fill-color: transparent;
+            text-fill-color: transparent;
+            color: transparent;
+          }
+        .container-fluid{
+            margin-right:-3vw;
+            margin-left:3vw;
+            background-color:#ff0000;
+          }
+        
+        h1{
+            font-family: 'Montserrat', sans-serif;
+            font-size:15vw;
+          }
+        .mb-0 {
+            margin-bottom: -32px!important;
+        }
+        .hire-us{
+          max-width: 500px;
+          margin: 50px auto;
+          
+        }
+        .about_section{
+            background-color:#FCFCFC;
+        }
+        :root {
+            --background-dark: #2d3548;
+            --text-light: rgba(255, 255, 255, 0.6);
+            --text-lighter: rgba(255, 255, 255, 0.9);
+            --spacing-s: 8px;
+            --spacing-m: 16px;
+            --spacing-l: 24px;
+            --spacing-xl: 32px;
+            --spacing-xxl: 64px;
+            --width-container: 1200px;
+        }
+          
+        * {
+        border: 0;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        }
+        
+        html {
+        height: 100%;
+        font-family: "Montserrat", sans-serif;
+        font-size: 14px;
+        }
+        
+        body {
+        height: 100%;
+        }
+        
+        .hero-section {
+        align-items: flex-start;
+        background-color:#FCFCFC;
+        display: flex;
+        min-height: 100%;
+        justify-content: center;
+        padding: var(--spacing-xxl) var(--spacing-l);
+        }
+        
+        .card-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        grid-column-gap: var(--spacing-l);
+        grid-row-gap: var(--spacing-l);
+        max-width: var(--width-container);
+        width: 100%;
+        }
+        
+        @media (min-width: 540px) {
+        .card-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        }
+        
+        @media (min-width: 960px) {
+        .card-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        }
+        
+        .card {
+        list-style: none;
+        position: relative;
+        }
+        
+        .card:before {
+        content: "";
+        display: block;
+        padding-bottom: 150%;
+        width: 100%;
+        }
+        .card{
+        border-radius: 64px;
+        background-color:#33333300;
+        }
+        .card__background {
+        background-size: cover;
+        background-position: center;
+        border-radius: var(--spacing-xl);
+        bottom: 0;
+        filter: brightness(0.75) saturate(1.2) contrast(0.85);
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform-origin: center;
+        transform: scale(1) translateZ(0);
+        transition: filter 200ms linear, transform 200ms linear;
+        }
+        
+        .card:hover .card__background {
+        transform: scale(1.05) translateZ(0);
+        }
+        
+        .card-grid:hover > .card:not(:hover) .card__background {
+        filter: brightness(0.5) saturate(0) contrast(1.2) blur(30px);
+        }
+        
+        .card__content {
+        left: 0;
+        padding: var(--spacing-l);
+        position: absolute;
+        top: 0;
+        }
+        
+        .card__category {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-bottom: var(--spacing-s);
+        text-transform: uppercase;
+        }
+        
+        .card__heading {
+        color: var(--text-lighter);
+        font-size: 1.9rem;
+        text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.2);
+        line-height: 1.4;
+        word-spacing: 100vw;
+        }
+        .wrapper-2 {
+            height: 10vh;
+            /*This part is important for centering*/
+            display: grid;
+            place-items: center;
+          }
+          
+          .typing-demo {
+            width: 22ch;
+            animation: typing 4s steps(22), blink .5s step-end infinite alternate;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid;
+            font-family: monospace;
+            font-size: 2em;
+            text-align:center;
+            
+          }
+          
+          @keyframes typing {
+            from {
+              width: 0
+            }
+          }
+              
+          @keyframes blink {
+            50% {
+              border-color: transparent
+            }
+          } 
+                
+          @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+          .title_head {
+            /* background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%), url(https://images.unsplash.com/photo-1617478755490-e21232a5eeaf?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYxNzU1NjM5NA&ixlib=rb-1.2.1&q=75&w=1920); */
+            background-image:url("https://images.unsplash.com/photo-1519120944692-1a8d8cfc107f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80");
+            font-family: "Cormorant Garamond", serif;
+            background-size: cover ;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+          }
+
+          .heading_h4{
+              font-family: 'Montserrat', sans-serif;
+              margin-top: 1%;
+              font-size: 2.5vw;
+              color: #333333;
+              text-align: center;
+              margin-bottom: 450px;
+          }
+
+          [type="checkbox"]:checked,
+          [type="checkbox"]:not(:checked){
+            position: absolute;
+            left: -9999px;
+          }
+          .menu-icon:checked + label,
+          .menu-icon:not(:checked) + label{
+            position: fixed;
+            top: 63px;
+            right: 75px;
+            display: block;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            z-index: 10;
+          }
+          .menu-icon:checked + label:before,
+          .menu-icon:not(:checked) + label:before{
+            position: absolute;
+            content: '';
+            display: block;
+            width: 30px;
+            height: 20px;
+            z-index: 20;
+            top: 0;
+            left: 0;
+            border-top: 2px solid #ececee;
+            border-bottom: 2px solid #ececee;
+            transition: border-width 100ms 1500ms ease, 
+                        top 100ms 1600ms cubic-bezier(0.23, 1, 0.32, 1),
+                        height 100ms 1600ms cubic-bezier(0.23, 1, 0.32, 1), 
+                        background-color 200ms ease,
+                        transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+          }
+          .menu-icon:checked + label:after,
+          .menu-icon:not(:checked) + label:after{
+            position: absolute;
+            content: '';
+            display: block;
+            width: 22px;
+            height: 2px;
+            z-index: 20;
+            top: 10px;
+            right: 4px;
+            background-color: #ececee;
+            margin-top: -1px;
+            transition: width 100ms 1750ms ease, 
+                        right 100ms 1750ms ease,
+                        margin-top 100ms ease, 
+                        transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+          }
+          .menu-icon:checked + label:before{
+            top: 10px;
+            transform: rotate(45deg);
+            height: 2px;
+            background-color: #ececee;
+            border-width: 0;
+            transition: border-width 100ms 340ms ease, 
+                        top 100ms 300ms cubic-bezier(0.23, 1, 0.32, 1),
+                        height 100ms 300ms cubic-bezier(0.23, 1, 0.32, 1), 
+                        background-color 200ms 500ms ease,
+                        transform 200ms 1700ms cubic-bezier(0.23, 1, 0.32, 1);
+          }
+          .menu-icon:checked + label:after{
+            width: 30px;
+            margin-top: 0;
+            right: 0;
+            transform: rotate(-45deg);
+            transition: width 100ms ease,
+                        right 100ms ease,  
+                        margin-top 100ms 500ms ease, 
+                        transform 200ms 1700ms cubic-bezier(0.23, 1, 0.32, 1);
+          }
+
+          .nav{
+            position: fixed;
+            top: 33px;
+            right: 50px;
+            display: block;
+            width: 80px;
+            height: 80px;
+            padding: 0;
+            margin: 0;
+            z-index: 9;
+            overflow: hidden;
+            box-shadow: 0 8px 30px 0 rgba(0,0,0,0.3);
+            background-color: #333333;
+            animation: border-transform 7s linear infinite;
+            transition: top 350ms 1100ms cubic-bezier(0.23, 1, 0.32, 1),  
+                        right 350ms 1100ms cubic-bezier(0.23, 1, 0.32, 1),
+                        transform 250ms 1100ms ease,
+                        width 650ms 400ms cubic-bezier(0.23, 1, 0.32, 1),
+                        height 650ms 400ms cubic-bezier(0.23, 1, 0.32, 1);
+          }
+          @keyframes border-transform{
+              0%,100% { border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%; } 
+            14% { border-radius: 40% 60% 54% 46% / 49% 60% 40% 51%; } 
+            28% { border-radius: 54% 46% 38% 62% / 49% 70% 30% 51%; } 
+            42% { border-radius: 61% 39% 55% 45% / 61% 38% 62% 39%; } 
+            56% { border-radius: 61% 39% 67% 33% / 70% 50% 50% 30%; } 
+            70% { border-radius: 50% 50% 34% 66% / 56% 68% 32% 44%; } 
+            84% { border-radius: 46% 54% 50% 50% / 35% 61% 39% 65%; } 
+          }
+
+          .menu-icon:checked ~ .nav {
+            animation-play-state: paused;
+            top: 50%;
+            right: 50%;
+            transform: translate(50%, -50%);
+            width: 200%;
+            height: 200%;
+            transition: top 350ms 700ms cubic-bezier(0.23, 1, 0.32, 1),  
+                        right 350ms 700ms cubic-bezier(0.23, 1, 0.32, 1),
+                        transform 250ms 700ms ease,
+                        width 750ms 1000ms cubic-bezier(0.23, 1, 0.32, 1),
+                        height 750ms 1000ms cubic-bezier(0.23, 1, 0.32, 1);
+          }
+
+          .nav ul{
+            position: absolute;
+            top: 50%;
+            left: 0;
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            z-index: 6;
+            text-align: center;
+            transform: translateY(-50%);
+            list-style: none;
+          }
+          .nav ul li{
+            position: relative;
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin: 10px 0;
+            text-align: center;
+            list-style: none;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(30px);
+            transition: all 250ms linear;
+          }
+          .nav ul li:nth-child(1){
+            transition-delay: 200ms;
+          }
+          .nav ul li:nth-child(2){
+            transition-delay: 150ms;
+          }
+          .nav ul li:nth-child(3){
+            transition-delay: 100ms;
+          }
+          .nav ul li:nth-child(4){
+            transition-delay: 50ms;
+          }
+          .nav ul li a{
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9vh;
+            text-transform: uppercase;
+            line-height: 1.2;
+            font-weight: 800;
+            display: inline-block;
+            position: relative;
+            color: #ececee;
+            transition: all 250ms linear;
+          }
+          .nav ul li a:hover{
+            text-decoration: none;
+            color: #ffeba7;
+          }
+          .nav ul li a:after{
+            display: block;
+            position: absolute;
+            top: 50%;
+            content: '';
+            height: 2vh;
+            margin-top: -1vh;
+            width: 0;
+            left: 0;
+            background-color: #333333;
+            opacity: 0.8;
+            transition: width 250ms linear;
+          }
+          .nav ul li a:hover:after{
+            width: 100%;
+          }
+          .menu-icon:checked ~ .nav  ul li {
+            pointer-events: auto;
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 350ms ease,
+                        transform 250ms ease;
+          }
+          .menu-icon:checked ~ .nav ul li:nth-child(1){
+            transition-delay: 1400ms;
+          }
+          .menu-icon:checked ~ .nav ul li:nth-child(2){
+            transition-delay: 1480ms;
+          }
+          .menu-icon:checked ~ .nav ul li:nth-child(3){
+            transition-delay: 1560ms;
+          }
+          .menu-icon:checked ~ .nav ul li:nth-child(4){
+            transition-delay: 1640ms;
+          }
+
+          .logo {
+            position: absolute;
+            top: 5px;
+            left: 50px;
+            display: block;
+            z-index: 11;
+            transition: all 250ms linear;
+
+
+          }
+          .logo img {
+            height: 8.5rem;
+            width: auto;
+            display: block;
+          }
+          @media screen and (max-width: 991px) {
+            .menu-icon:checked + label,
+            .menu-icon:not(:checked) + label{
+              right: 55px;
+            }
+            .logo {
+              left: 30px;
+            }
+            .nav{
+              right: 30px;
+            }
+            h1{
+              font-size: 9vw;
+              -webkit-text-stroke: 2px transparent;
+              text-stroke: 2px transparent;
+              -webkit-text-fill-color: #ffeba7;
+              text-fill-color: #ffeba7;
+              color: #ffeba7;
+            }
+            .nav ul li a{
+              font-size: 8vh;
+            }
+          }
+
+          .zoom {
+              padding: 50px;
+              transition: transform .2s; /* Animation */
+              width: 0px;
+              height: 0px;
+            }
+            
+            .zoom:hover {
+              transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+            }
+
+    </style>   
+    <script>
+      $(".counter").counterUp({
+        delay: 10,
+        
+        time: 2000
+      });
+      $(".counter").addClass('animated fadeInDownBig');
+      
+    </script>
+    </body>
+</html>

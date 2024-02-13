@@ -1,4 +1,8 @@
 from django.shortcuts import render
-def index(response):
-    return render(response, "app/index.html")
+
 # Create your views here.
+def home(request):
+    return render(request, "app/index.html")
+
+def exe(request):
+    return render(request, "app/exe.html")

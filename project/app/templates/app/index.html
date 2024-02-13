@@ -1,915 +1,768 @@
 <!DOCTYPE html>
+<!--[if lt IE 9 ]><html class="no-js oldie" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="no-js oldie ie9" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
 
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js'></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-        <script>
-          (function ($) {
-              $.fn.countTo = function (options) {
-                  options = options || {};
-                  
-                  return $(this).each(function () {
-                      // set options for current element
-                      var settings = $.extend({}, $.fn.countTo.defaults, {
-                          from:            $(this).data('from'),
-                          to:              $(this).data('to'),
-                          speed:           $(this).data('speed'),
-                          refreshInterval: $(this).data('refresh-interval'),
-                          decimals:        $(this).data('decimals')
-                      }, options);
-                      
-                      // how many times to update the value, and how much to increment the value on each update
-                      var loops = Math.ceil(settings.speed / settings.refreshInterval),
-                          increment = (settings.to - settings.from) / loops;
-                      
-                      // references & variables that will change with each update
-                      var self = this,
-                          $self = $(this),
-                          loopCount = 0,
-                          value = settings.from,
-                          data = $self.data('countTo') || {};
-                      
-                      $self.data('countTo', data);
-                      
-                      // if an existing interval can be found, clear it first
-                      if (data.interval) {
-                          clearInterval(data.interval);
-                      }
-                      data.interval = setInterval(updateTimer, settings.refreshInterval);
-                      
-                      // initialize the element with the starting value
-                      render(value);
-                      
-                      function updateTimer() {
-                          value += increment;
-                          loopCount++;
-                          
-                          render(value);
-                          
-                          if (typeof(settings.onUpdate) == 'function') {
-                              settings.onUpdate.call(self, value);
-                          }
-                          
-                          if (loopCount >= loops) {
-                              // remove the interval
-                              $self.removeData('countTo');
-                              clearInterval(data.interval);
-                              value = settings.to;
-                              
-                              if (typeof(settings.onComplete) == 'function') {
-                                  settings.onComplete.call(self, value);
-                              }
-                          }
-                      }
-                      
-                      function render(value) {
-                          var formattedValue = settings.formatter.call(self, value, settings);
-                          $self.html(formattedValue);
-                      }
-                  });
-              };
-              
-              $.fn.countTo.defaults = {
-                  from: 0,               // the number the element should start at
-                  to: 0,                 // the number the element should end at
-                  speed: 1000,           // how long it should take to count between the target numbers
-                  refreshInterval: 100,  // how often the element should be updated
-                  decimals: 0,           // the number of decimal places to show
-                  formatter: formatter,  // handler for formatting the value before rendering
-                  onUpdate: null,        // callback method for every time the element is updated
-                  onComplete: null       // callback method for when the element finishes updating
-              };
-              
-              function formatter(value, settings) {
-                  return value.toFixed(settings.decimals);
-              }
-          }(jQuery));
-          
-          jQuery(function ($) {
-            // custom formatting example
-            $('.count-number').data('countToOptions', {
-              formatter: function (value, options) {
-                return value.toFixed(options.decimals).replace(/\B(?=(?:\d{3})+(?!\d))/g, ',');
-              }
-            });
-            
-            // start all the timers
-            $('.timer').each(count);  
-            
-            function count(options) {
-              var $this = $(this);
-              options = $.extend({}, options || {}, $this.data('countToOptions') || {});
-              $this.countTo(options);
-            }
-          });
-      </script>
-      </head>
-    <body>
-    <div>
-        <div>
-        <a href="/" class="logo" target="_blank">
-        <div class="zoom fixed-top">
-            <img src="static/logo.png" alt="">
+<head>
+
+    <!--- basic page needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <title>AgencyFluent</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- mobile specific metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="static/css/base.css">
+    <link rel="stylesheet" href="static/css/vendor.css">
+    <link rel="stylesheet" href="static/css/main.css">
+
+    <!-- script
+    ================================================== -->
+    <script src="static/js/modernizr.js" type="text/javascript"></script>
+    <script src="static/js/pace.min.js" type="text/javascript"></script>
+
+    <!-- favicons
+    ================================================== -->
+    <link rel="apple-touch-icon" sizes="180x180" href="static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/favicon-16x16.png">
+    <link rel="manifest" href="static/site.webmanifest">
+    <link rel="mask-icon" href="static/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+
+</head>
+
+<body id="top">
+
+    <!-- header
+    ================================================== -->
+    <header class="s-header">
+
+        <div class="header-logo">
+            <a class="site-logo" href="index.html">
+                <img src="static/images/31.png" alt="Homepage">
+            </a>
+        </div>
+
+        <nav class="header-nav">
+
+            <a href="#0" class="header-nav__close" title="close"><span>Close</span></a>
+
+            <div class="header-nav__content">
+                <h3>Navigation</h3>
+                
+                <ul class="header-nav__list">
+                    <li class="current"><a class="smoothscroll"  href="#home" title="home">Home</a></li>
+                    <li><a class="smoothscroll"  href="#about" title="about">About</a></li>
+                    <li><a class="smoothscroll"  href="#services" title="services">Services</a></li>
+                    <li><a class="smoothscroll"  href="#works" title="works">Works</a></li>
+                    <li><a class="smoothscroll"  href="#clients" title="clients">Clients</a></li>
+                    <li><a class="smoothscroll"  href="#contact" title="contact">Contact</a></li>
+                </ul>
+    
+                <p>When you choose AgencyFluent, you can expect professionalism, expertise, and results. Our team is committed to staying up-to-date with the latest industry trends and best practices, and evolve our strategies to adapt to digital landscape.</p>
+    
+                <ul class="header-nav__social">
+                    <li>
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-instagram"></i></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-behance"></i></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-dribbble"></i></a>
+                    </li>
+                </ul>
+
+            </div> <!-- end header-nav__content -->
+
+        </nav>  <!-- end header-nav -->
+
+        <a class="header-menu-toggle" href="#0">
+            <span class="header-menu-text">Menu</span>
+            <span class="header-menu-icon"></span>
         </a>
-        </div>
-          <input class="menu-icon" type="checkbox" id="menu-icon" name="menu-icon"/>
-          <label for="menu-icon"></label>
-          <nav class="nav"> 		
-              <ul class="pt-5">
-                  <li><a href="#">Work</a></li>
-                  <li><a href="#">Studio</a></li>
-                  <li><a href="#">News</a></li>
-                  <li><a href="#">Contact</a></li>
-              </ul>
-          </nav>
-          
-          <section class="test1 title_head">
-                <h1 class="mb-0 heading_h1">AgencyFluent</h1>
-                <div class="wrapper-2">
-                <h4 class="mb-0 heading_h4 typing-demo ">Marketing Made Fluent.</h4>
+
+    </header> <!-- end s-header -->
+
+
+    <!-- home
+    ================================================== -->
+    <section id="home" class="s-home target-section" data-parallax="scroll" data-image-src="static/images/hero-bg.jpg" data-natural-width=3000 data-natural-height=2000 data-position-y=center>
+
+        <div class="overlay"></div>
+        <div class="shadow-overlay"></div>
+
+        <div class="home-content">
+
+            <div class="row home-content__main">
+
+                <h3>Welcome to AgencyFluent</h3>
+
+                <h1>
+                    Your go-to online <br>
+                    agency for all <br>
+                    your marketing and <br>
+                    web design needs.
+                </h1>
+
+                <div class="home-content__buttons">
+                    <a href="#contact" class="smoothscroll btn btn--stroke">
+                        Get Started
+                    </a>
+                    <a href="#about" class="smoothscroll btn btn--stroke">
+                        More About Us
+                    </a>
                 </div>
-                <div class="spacer-big">
-                </div>
-                {% comment %} <img src=dot.gif height=500 width=1> {% endcomment %}
-          </section>  
-          <section class="about_section">  
-            <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
-            <h1 class="about_h1">Our Services</h1>
-            <section class="hero-section">
+
+            </div>
+
+            <div class="home-content__scroll">
+                <a href="#about" class="scroll-link smoothscroll">
+                    <span>Scroll Down</span>
+                </a>
+            </div>
+
+            <div class="home-content__line"></div>
+
+        </div> <!-- end home-content -->
+
+
+        <ul class="home-social">
+            <li>
+                <a href="#0"><i class="fa fa-facebook" aria-hidden="true"></i><span>Facebook</span></a>
+            </li>
+            <li>
+                <a href="#0"><i class="fa fa-twitter" aria-hidden="true"></i><span>Twiiter</span></a>
+            </li>
+            <li>
+                <a href="#0"><i class="fa fa-instagram" aria-hidden="true"></i><span>Instagram</span></a>
+            </li>
+            <li>
+                <a href="#0"><i class="fa fa-behance" aria-hidden="true"></i><span>Behance</span></a>
+            </li>
+            <li>
+                <a href="#0"><i class="fa fa-dribbble" aria-hidden="true"></i><span>Dribbble</span></a>
+            </li>
+        </ul> 
+        <!-- end home-social -->
+
+    </section> <!-- end s-home -->
+
+
+    <!-- about
+    ================================================== -->
+    <section id='about' class="s-about">
+
+        <div class="row section-header has-bottom-sep" data-aos="fade-up">
+            <div class="col-full">
+                <h3 class="subhead subhead--dark">Hello There</h3>
+                <h1 class="display-1 display-1--light">We Are AgencyFluent</h1>
+            </div>
+        </div> <!-- end section-header -->
+
+        <div class="row about-desc" data-aos="fade-up">
+            <div class="col-full">
+                <p>At AgencyFluent, we understand that every business is unique, and we tailor our services to suit your specific goals and requirements. Our marketing services are designed to enhance your online presence and drive traffic, leads, and conversions. From social media management and search engine optimization (SEO) to pay-per-click (PPC) advertising and content creation, our team utilizes the latest tools and techniques to optimize your digital marketing efforts and deliver results.</p>
+            </div>
+        </div> <!-- end about-desc -->
+
+        <div class="row about-stats stats block-1-4 block-m-1-2 block-mob-full" data-aos="fade-up">
                 
-              <div class="card-grid">
-                <a class="card" href="#">
-                  <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557177324-56c542165309?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80)"></div>
-                  <div class="card__content">
-                    <p class="card__category">Category</p>
-                    <h3 class="card__heading">Example Card Heading</h3>
-                  </div>
-                </a>
-                <a class="card" href="#">
-                  <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557187666-4fd70cf76254?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)"></div>
-                  <div class="card__content">
-                    <p class="card__category">Category</p>
-                    <h3 class="card__heading">Example Card Heading</h3>
-                  </div>
-                </a>
-                <a class="card" href="#">
-                  <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1556680262-9990363a3e6d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)"></div>
-                  <div class="card__content">
-                    <p class="card__category">Category</p>
-                    <h3 class="card__heading">Example Card Heading</h3>
-                  </div>
-                </li>
-                <a class="card" href="#">
-                  <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557004396-66e4174d7bf6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)"></div>
-                  <div class="card__content">
-                    <p class="card__category">Category</p>
-                    <h3 class="card__heading">Example Card Heading</h3>
-                  </div>
-                </a>
-              <div>
-            </section>
-          </section>
-          <section class="why_section">
-            
-            <h1 class="about_h1">Why You Should Work With Us</h1>
-            <div class="spacer-small ">
+            <div class="col-block stats__col ">
+                <div class="stats__count">65</div>
+                <h5>Awards Received</h5>
             </div>
-              <div class="wrapper">
-                <div class="counter ">
-                  <h2 class="timer count-title count-number" data-to="300" data-speed="3000"></h2>
-                   <p class="count-text ">SomeText GoesHere</p>
+            <div class="col-block stats__col">
+                <div class="stats__count">1505</div>
+                <h5>Cups of Coffee</h5>
+            </div>
+            <div class="col-block stats__col">
+                <div class="stats__count">109</div>
+                <h5>Projects Completed</h5>
+            </div>
+            <div class="col-block stats__col">
+                <div class="stats__count">102</div>
+                <h5>Happy Clients</h5> 
+            </div>
+
+        </div> <!-- end about-stats -->
+
+        <div class="about__line"></div>
+
+    </section> <!-- end s-about -->
+
+
+    <!-- services
+    ================================================== -->
+    <section id='services' class="s-services">
+
+        <div class="row section-header has-bottom-sep" data-aos="fade-up">
+            <div class="col-full">
+                <h3 class="subhead">What We Do</h3>
+                <h1 class="display-2">We’ve got everything you need to launch, grow and scall your business</h1>
+            </div>
+        </div> <!-- end section-header -->
+
+        <div class="row services-list block-1-2 block-tab-full">
+
+            <div class="col-block service-item" data-aos="fade-up">
+                <div class="service-icon">
+                    <i class="icon-paint-brush"></i>
                 </div>
-            
-                <div class="counter ">
-                 
-                  <h2 class="timer count-title count-number" data-to="1700" data-speed="3000"></h2>
-                  <p class="count-text ">SomeText GoesHere</p>
-                </div>
-            
-                <div class="counter">
-                  
-                  <h2 class="timer count-title count-number" data-to="11900" data-speed="3000"></h2>
-                  <p class="count-text ">SomeText GoesHere</p>
+                <div class="service-text">
+                    <h3 class="h2">Social Media management</h3>
+                    <p>Managing and curating material for multiple social media channels, such as making updates, replying to comments, and interacting with followers.
+                    </p>
                 </div>
             </div>
-            
-          </section>
-          <section class="hire-us">
-            <div class="box">
-              <span></span>
-              <div class="content">
-                <h2>Hover me!</h2>
-              </div>
+
+            <div class="col-block service-item" data-aos="fade-up">
+                <div class="service-icon">
+                    <i class="icon-group"></i>
+                </div>
+                <div class="service-text">
+                    <h3 class="h2">Content Creation</h3>
+                    <p>Creating high-quality and interesting material, such as photographs, videos, and subtitles, suited to various social media networks.
+                    </p>
+                </div>
             </div>
-          </section>
-        </div>
-        
-    </body>
-       
-    <style>
-      .box {
-        position: relative;
-        width: 640px;
-        height: 440px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: 0.5s;
-        z-index: 1;
-       }
-       
-       .box::before {
-        content: ' ';
-        position: absolute;
-        top: 0;
-        left: 50px;
-        width: 50%;
-        height: 100%;
-        text-decoration: none;
-        background: #fff;
-        border-radius: 8px;
-        transform: skewX(15deg);
-        transition: 0.5s;
-       }
-       
-       .box::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50;
-        width: 50%;
-        height: 100%;
-        background: #fff;
-        border-radius: 8px;
-        transform: skewX(15deg);
-        transition: 0.5s;
-        filter: blur(30px);
-       }
-       
-       .box:hover:before,
-       .box:hover:after {
-        transform: skewX(0deg) scaleX(1.3);
-       }
-       
-       .box:before,
-       .box:after {
-        background: linear-gradient(315deg, #ffbc00, #ff0058)
-       }
-       
-       .box span {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 5;
-        pointer-events: none;
-       }
-       
-       .box span::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 0;
-        height: 0;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        opacity: 0;
-        transition: 0.1s;
-        animation: animate 2s ease-in-out infinite;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08)
-       }
-       
-       .box span::before {
-        top: -40px;
-        left: 40px;
-        width: 50px;
-        height: 50px;
-        opacity: 1;
-       }
-       
-       .box span::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        opacity: 0;
-        transition: 0.5s;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        animation-delay: -1s;
-       }
-       
-       .box span:after {
-        bottom: -40px;
-        right: 40px;
-        width: 50px;
-        height: 50px;
-        opacity: 1;
-       }
-       
-       .box .content {
-        position: relative;
-        width: 300px;
-        height: 400px;
-        align-items:center;
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        z-index: 1;
-        transform: 0.5s;
-        color: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-       }
-       
-       .box .content h2 {
-        font-size: 20px;
-        color: #fff;
-        margin-bottom: 10px;
-       }
-      
-      .wrapper {position: relative;}
-      .counter { background-color: #ffffff; padding: 20px 0; border-radius: 5px;}
-      .count-title { font-size: 8vw; font-weight: normal;  margin-top: 10px; margin-bottom: 0; text-align: center; }
-      .count-text { font-size: 2.5vw; font-weight: normal;  margin-top: 10px; margin-bottom: 0; text-align: center; }
-      .fa-2x { margin: 0 auto; float: none; display: table; color: #4ad1e5; }    
-      @import url(//fonts.googleapis.com/css?family=Montserrat:400,700);
-      .why_section{
-        align:center;
-      }
-      
-      .counter_font {
-        font-family: 'Montserrat', sans-serif;
-        font-weight: bold;
-        font-size:11vw;
-        
-      }
-      .col-md-4 {
-        text-align: center;
-        padding-bottom: 50px;
-        align-items:center;
-      }
-      
-      .col-md-4:last-child {
-        border-right: 0px solid black;
-      }
-      
-      .counter {
-        animation-duration: 3s;
-        animation-delay: 4s;
-      }
-      
-      i {
-        font-size: 20px !important;
-      }
-      
-      @media (max-width: 991px) {
-        .col-md-4 {
-          border-right: 0px dashed black;
-          border-bottom: 0px dashed black;
-          width: 50%;
-          margin: auto auto;
-        }
-        
-        .col-md-4:last-child {
-          border-bottom: 0px dashed black;
-        }
-      }
-      @media (min-width: 540px) {
-        .col-md-4 {
-          width: 25%;
-          margin: auto auto;
-        }
-        }  
-      .spacer-big{
-            height:400px;
-        }
-        .spacer-small{
-          height:90px;
-      }
-        .test1{
-            margin: -100px 0px 0px 0px;
-        }
-        .heading_h4{
-            font-family: 'Montserrat', sans-serif;
-            margin-top: 0px;
-            font-size: 2.5vw;
-            color: #333333;
-            text-align: center;
-            padding-bottom:0px;
-        }
-        .heading_h1{
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            padding-top: 400px;
-            font-size: 10vw;
-            line-height: 1;
-            margin-bottom: 0px;
-            color: #333333;
-            text-align: center;
-            -webkit-text-stroke: 2px #333333;
-            text-stroke: 2px #ffeba7;
-            -webkit-text-fill-color: transparent;
-            text-fill-color: transparent;
-            color: transparent;
-          }
-          .about_h1{
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            padding-top: 15px;
-            font-size: 6vw;
-            line-height: 1;
-            margin-bottom:-25px;
-            color: #333333;
-            text-align: center;
-            -webkit-text-stroke: 2px #333333;
-            text-stroke: 2px #ffeba7;
-            -webkit-text-fill-color: transparent;
-            text-fill-color: transparent;
-            color: transparent;
-          }
-        .container-fluid{
-            margin-right:-3vw;
-            margin-left:3vw;
-            background-color:#ff0000;
-          }
-        
-        h1{
-            font-family: 'Montserrat', sans-serif;
-            font-size:15vw;
-          }
-        .mb-0 {
-            margin-bottom: -32px!important;
-        }
-        .hire-us{
-          max-width: 500px;
-          margin: 50px auto;
-          
-        }
-        .about_section{
-            background-color:#FCFCFC;
-        }
-        :root {
-            --background-dark: #2d3548;
-            --text-light: rgba(255, 255, 255, 0.6);
-            --text-lighter: rgba(255, 255, 255, 0.9);
-            --spacing-s: 8px;
-            --spacing-m: 16px;
-            --spacing-l: 24px;
-            --spacing-xl: 32px;
-            --spacing-xxl: 64px;
-            --width-container: 1200px;
-        }
-          
-        * {
-        border: 0;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        }
-        
-        html {
-        height: 100%;
-        font-family: "Montserrat", sans-serif;
-        font-size: 14px;
-        }
-        
-        body {
-        height: 100%;
-        }
-        
-        .hero-section {
-        align-items: flex-start;
-        background-color:#FCFCFC;
-        display: flex;
-        min-height: 100%;
-        justify-content: center;
-        padding: var(--spacing-xxl) var(--spacing-l);
-        }
-        
-        .card-grid {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        grid-column-gap: var(--spacing-l);
-        grid-row-gap: var(--spacing-l);
-        max-width: var(--width-container);
-        width: 100%;
-        }
-        
-        @media (min-width: 540px) {
-        .card-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        }
-        
-        @media (min-width: 960px) {
-        .card-grid {
-            grid-template-columns: repeat(4, 1fr);
-        }
-        }
-        
-        .card {
-        list-style: none;
-        position: relative;
-        }
-        
-        .card:before {
-        content: "";
-        display: block;
-        padding-bottom: 150%;
-        width: 100%;
-        }
-        .card{
-        border-radius: 64px;
-        background-color:#33333300;
-        }
-        .card__background {
-        background-size: cover;
-        background-position: center;
-        border-radius: var(--spacing-xl);
-        bottom: 0;
-        filter: brightness(0.75) saturate(1.2) contrast(0.85);
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        transform-origin: center;
-        transform: scale(1) translateZ(0);
-        transition: filter 200ms linear, transform 200ms linear;
-        }
-        
-        .card:hover .card__background {
-        transform: scale(1.05) translateZ(0);
-        }
-        
-        .card-grid:hover > .card:not(:hover) .card__background {
-        filter: brightness(0.5) saturate(0) contrast(1.2) blur(30px);
-        }
-        
-        .card__content {
-        left: 0;
-        padding: var(--spacing-l);
-        position: absolute;
-        top: 0;
-        }
-        
-        .card__category {
-        color: var(--text-light);
-        font-size: 0.9rem;
-        margin-bottom: var(--spacing-s);
-        text-transform: uppercase;
-        }
-        
-        .card__heading {
-        color: var(--text-lighter);
-        font-size: 1.9rem;
-        text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.2);
-        line-height: 1.4;
-        word-spacing: 100vw;
-        }
-        .wrapper-2 {
-            height: 10vh;
-            /*This part is important for centering*/
-            display: grid;
-            place-items: center;
-          }
-          
-          .typing-demo {
-            width: 22ch;
-            animation: typing 4s steps(22), blink .5s step-end infinite alternate;
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 3px solid;
-            font-family: monospace;
-            font-size: 2em;
-            text-align:center;
-            
-          }
-          
-          @keyframes typing {
-            from {
-              width: 0
-            }
-          }
-              
-          @keyframes blink {
-            50% {
-              border-color: transparent
-            }
-          } 
+
+            <div class="col-block service-item" data-aos="fade-up">
+                <div class="service-icon">
+                    <i class="icon-megaphone"></i>
+                </div>  
+                <div class="service-text">
+                    <h3 class="h2">Paid Advertising</h3>
+                    <p>Targeted advertising campaigns on sites such as Facebook, Instagram, Twitter, and LinkedIn may help enhance company awareness and reach a larger audience.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-block service-item" data-aos="fade-up">
+                <div class="service-icon">
+                    <i class="icon-earth"></i>
+                </div>
+                <div class="service-text">
+                    <h3 class="h2">Web Development</h3>
+                    <p>Web development is the creation and maintenance of websites, encompassing design, coding, and functionality to ensure a smooth online user experience.</p>
+                </div>
+            </div>
+
+            <div class="col-block service-item" data-aos="fade-up">
+                <div class="service-icon">
+                    <i class="icon-cube"></i>
+                </div>
+                <div class="service-text">
+                    <h3 class="h2">Graphic Design</h3>
+                    <p>Creating eye-catching visuals and branding pieces for social media accounts and campaigns.
+                    </p>
+                </div>
+            </div>
+    
+            <div class="col-block service-item" data-aos="fade-up">
+                <div class="service-icon"><i class="icon-lego-block"></i></div>
+                <div class="service-text">
+                    <h3 class="h2">Social Media Audits</h3>
+                    <p>Evaluating a company's present social media presence, finding opportunities for development, and devising performance-enhancing measures.
+                    </p>
+                </div>
+            </div>
+
+        </div> <!-- end services-list -->
+
+    </section> <!-- end s-services -->
+
+
+    <!-- works
+    ================================================== -->
+    <section id='works' class="s-works">
+
+        <div class="intro-wrap">
                 
-          @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
-          .title_head {
-            /* background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%), url(https://images.unsplash.com/photo-1617478755490-e21232a5eeaf?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYxNzU1NjM5NA&ixlib=rb-1.2.1&q=75&w=1920); */
-            background-image:url("https://images.unsplash.com/photo-1519120944692-1a8d8cfc107f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80");
-            font-family: "Cormorant Garamond", serif;
-            background-size: cover ;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            <div class="row section-header has-bottom-sep light-sep" data-aos="fade-up">
+                <div class="col-full">
+                    <h3 class="subhead">Recent Works</h3>
+                    <h1 class="display-2 display-2--light">We love what we do, check out some of our latest works</h1>
+                </div>
+            </div> <!-- end section-header -->
 
-          }
+        </div> <!-- end intro-wrap -->
 
-          .heading_h4{
-              font-family: 'Montserrat', sans-serif;
-              margin-top: 1%;
-              font-size: 2.5vw;
-              color: #333333;
-              text-align: center;
-              margin-bottom: 450px;
-          }
+        <div class="row works-content">
+            <div class="col-full masonry-wrap">
+                <div class="masonry">
+    
+                    <div class="masonry__brick" data-aos="fade-up">
+                        <div class="item-folio">
+                                
+                            <div class="item-folio__thumb">
+                                <a href="static/images/project/pro1.png" class="thumb-link" title="Shutterbug" data-size="1050x700">
+                                    <img src="static/images/project/pro1.png" 
+                                         srcset="static/images/project/pro1.png 1x, static/images/project/pro1@2x.png 2x" alt="">
+                                </a>
+                            </div>
+    
+                            <div class="item-folio__text">
+                                <h3 class="item-folio__title">
+                                    Shutterbug
+                                </h3>
+                                <p class="item-folio__cat">
+                                    Branding
+                                </p>
+                            </div>
+    
+                            <a href="https://www.behance.net/" class="item-folio__project-link" title="Project link">
+                                <i class="icon-link"></i>
+                            </a>
+    
+                            <div class="item-folio__caption">
+                                <p>Vero molestiae sed aut natus excepturi. Et tempora numquam. Temporibus iusto quo.Unde dolorem corrupti neque nisi.</p>
+                            </div>
+    
+                        </div>
+                    </div> <!-- end masonry__brick -->
 
-          [type="checkbox"]:checked,
-          [type="checkbox"]:not(:checked){
-            position: absolute;
-            left: -9999px;
-          }
-          .menu-icon:checked + label,
-          .menu-icon:not(:checked) + label{
-            position: fixed;
-            top: 63px;
-            right: 75px;
-            display: block;
-            width: 30px;
-            height: 30px;
-            padding: 0;
-            margin: 0;
-            cursor: pointer;
-            z-index: 10;
-          }
-          .menu-icon:checked + label:before,
-          .menu-icon:not(:checked) + label:before{
-            position: absolute;
-            content: '';
-            display: block;
-            width: 30px;
-            height: 20px;
-            z-index: 20;
-            top: 0;
-            left: 0;
-            border-top: 2px solid #ececee;
-            border-bottom: 2px solid #ececee;
-            transition: border-width 100ms 1500ms ease, 
-                        top 100ms 1600ms cubic-bezier(0.23, 1, 0.32, 1),
-                        height 100ms 1600ms cubic-bezier(0.23, 1, 0.32, 1), 
-                        background-color 200ms ease,
-                        transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
-          }
-          .menu-icon:checked + label:after,
-          .menu-icon:not(:checked) + label:after{
-            position: absolute;
-            content: '';
-            display: block;
-            width: 22px;
-            height: 2px;
-            z-index: 20;
-            top: 10px;
-            right: 4px;
-            background-color: #ececee;
-            margin-top: -1px;
-            transition: width 100ms 1750ms ease, 
-                        right 100ms 1750ms ease,
-                        margin-top 100ms ease, 
-                        transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
-          }
-          .menu-icon:checked + label:before{
-            top: 10px;
-            transform: rotate(45deg);
-            height: 2px;
-            background-color: #ececee;
-            border-width: 0;
-            transition: border-width 100ms 340ms ease, 
-                        top 100ms 300ms cubic-bezier(0.23, 1, 0.32, 1),
-                        height 100ms 300ms cubic-bezier(0.23, 1, 0.32, 1), 
-                        background-color 200ms 500ms ease,
-                        transform 200ms 1700ms cubic-bezier(0.23, 1, 0.32, 1);
-          }
-          .menu-icon:checked + label:after{
-            width: 30px;
-            margin-top: 0;
-            right: 0;
-            transform: rotate(-45deg);
-            transition: width 100ms ease,
-                        right 100ms ease,  
-                        margin-top 100ms 500ms ease, 
-                        transform 200ms 1700ms cubic-bezier(0.23, 1, 0.32, 1);
-          }
+                    <div class="masonry__brick" data-aos="fade-up">
+                        <div class="item-folio">
+                                
+                            <div class="item-folio__thumb">
+                                <a href="static/images/project/pro2.png" class="thumb-link" title="Woodcraft" data-size="1050x700">
+                                    <img src="static/images/project/pro2.png" 
+                                         srcset="static/images/project/pro2.png 1x, static/images/project/pro2@2x.png" alt="">
+                                </a>
+                            </div>
+    
+                            <div class="item-folio__text">
+                                <h3 class="item-folio__title">
+                                    Woodcraft
+                                </h3>
+                                <p class="item-folio__cat">
+                                    Web Design
+                                </p>
+                            </div>
+    
+                            <a href="https://www.behance.net/" class="item-folio__project-link" title="Project link">
+                                <i class="icon-link"></i>
+                            </a>
+    
+                            <div class="item-folio__caption">
+                                <p>Vero molestiae sed aut natus excepturi. Et tempora numquam. Temporibus iusto quo.Unde dolorem corrupti neque nisi.</p>
+                            </div>
+    
+                        </div>
+                    </div> <!-- end masonry__brick -->
+    
+                    <div class="masonry__brick" data-aos="fade-up">
+                        <div class="item-folio">
+                                
+                            <div class="item-folio__thumb">
+                                <a href="static/images/project/pro3.png" class="thumb-link" title="The Beetle Car" data-size="1050x700">
+                                    <img src="static/images/project/pro3.png"
+                                         srcset="static/images/project/pro3.png 1x, static/images/project/pro3@2x.png 2x" alt="">
+                                </a>
+                            </div>
+    
+                            <div class="item-folio__text">
+                                <h3 class="item-folio__title">
+                                    The Beetle
+                                </h3>
+                                <p class="item-folio__cat">
+                                    Web Development
+                                </p>
+                            </div>
+    
+                            <a href="https://www.behance.net/" class="item-folio__project-link" title="Project link">
+                                <i class="icon-link"></i>
+                            </a>
+    
+                            <div class="item-folio__caption">
+                                <p>Vero molestiae sed aut natus excepturi. Et tempora numquam. Temporibus iusto quo.Unde dolorem corrupti neque nisi.</p>
+                            </div>
+    
+                        </div>
+                    </div> <!-- end masonry__brick -->
+    
+                    <div class="masonry__brick" data-aos="fade-up">
+                        <div class="item-folio">
+                                
+                            <div class="item-folio__thumb">
+                                <a href="static/images/project/pro4.png" class="thumb-link" title="Grow Green" data-size="1050x700">
+                                    <img src="static/images/project/pro4.png" 
+                                         srcset="static/images/project/pro4.png 1x, static/images/project/pro4@2x.png 2x" alt="">
+                                </a>
+                            </div>
+    
+                            <div class="item-folio__text">
+                                <h3 class="item-folio__title">
+                                    Grow Green
+                                </h3>
+                                <p class="item-folio__cat">
+                                    Branding
+                                </p>
+                            </div>
+    
+                            <a href="https://www.behance.net/" class="item-folio__project-link" title="Project link">
+                                <i class="icon-link"></i>
+                            </a>
+    
+                            <div class="item-folio__caption">
+                                <p>Vero molestiae sed aut natus excepturi. Et tempora numquam. Temporibus iusto quo.Unde dolorem corrupti neque nisi.</p>
+                            </div>
+    
+                        </div>
+                    </div> <!-- end masonry__brick -->
 
-          .nav{
-            position: fixed;
-            top: 33px;
-            right: 50px;
-            display: block;
-            width: 80px;
-            height: 80px;
-            padding: 0;
-            margin: 0;
-            z-index: 9;
-            overflow: hidden;
-            box-shadow: 0 8px 30px 0 rgba(0,0,0,0.3);
-            background-color: #333333;
-            animation: border-transform 7s linear infinite;
-            transition: top 350ms 1100ms cubic-bezier(0.23, 1, 0.32, 1),  
-                        right 350ms 1100ms cubic-bezier(0.23, 1, 0.32, 1),
-                        transform 250ms 1100ms ease,
-                        width 650ms 400ms cubic-bezier(0.23, 1, 0.32, 1),
-                        height 650ms 400ms cubic-bezier(0.23, 1, 0.32, 1);
-          }
-          @keyframes border-transform{
-              0%,100% { border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%; } 
-            14% { border-radius: 40% 60% 54% 46% / 49% 60% 40% 51%; } 
-            28% { border-radius: 54% 46% 38% 62% / 49% 70% 30% 51%; } 
-            42% { border-radius: 61% 39% 55% 45% / 61% 38% 62% 39%; } 
-            56% { border-radius: 61% 39% 67% 33% / 70% 50% 50% 30%; } 
-            70% { border-radius: 50% 50% 34% 66% / 56% 68% 32% 44%; } 
-            84% { border-radius: 46% 54% 50% 50% / 35% 61% 39% 65%; } 
-          }
+                    <div class="masonry__brick" data-aos="fade-up">
+                        <div class="item-folio">
+                                
+                            <div class="item-folio__thumb">
+                                <a href="static/images/project/pro5.png" class="thumb-link" title="Guitarist" data-size="1050x700">
+                                    <img src="static/images/project/pro5.png" 
+                                         srcset="static/images/project/pro5.png 1x, static/images/project/pro5@2x.png 2x" alt="">
+                                </a>
+                            </div>
+    
+                            <div class="item-folio__text">
+                                <h3 class="item-folio__title">
+                                    Guitarist
+                                </h3>
+                                <p class="item-folio__cat">
+                                    Web Design
+                                </p>
+                            </div>
+    
+                            <a href="https://www.behance.net/" class="item-folio__project-link" title="Project link">
+                                <i class="icon-link"></i>
+                            </a>
+    
+                            <div class="item-folio__caption">
+                                <p>Vero molestiae sed aut natus excepturi. Et tempora numquam. Temporibus iusto quo.Unde dolorem corrupti neque nisi.</p>
+                            </div>
+    
+                        </div>
+                    </div> <!-- end masonry__brick -->
+    
+                    <div class="masonry__brick" data-aos="fade-up">
+                        <div class="item-folio">
+                                
+                            <div class="item-folio__thumb">
+                                <a href="static/images/project/pro6.png" class="thumb-link" title="Palmeira" data-size="1050x700">
+                                    <img src="static/images/project/pro6.png"
+                                         srcset="static/images/project/pro6.png 1x, static/images/project/pro6@2x.png 2x" alt="">
+                                </a>
+                            </div>
+    
+                            <div class="item-folio__text">
+                                <h3 class="item-folio__title">
+                                    Palmeira
+                                </h3>
+                                <p class="item-folio__cat">
+                                    Web Design
+                                </p>
+                            </div>
+    
+                            <a href="https://www.behance.net/" class="item-folio__project-link" title="Project link">
+                                <i class="icon-link"></i>
+                            </a>
+    
+                            <div class="item-folio__caption">
+                                <p>Vero molestiae sed aut natus excepturi. Et tempora numquam. Temporibus iusto quo.Unde dolorem corrupti neque nisi.</p>
+                            </div>
+    
+                        </div>
+                    </div> <!-- end masonry__brick -->
 
-          .menu-icon:checked ~ .nav {
-            animation-play-state: paused;
-            top: 50%;
-            right: 50%;
-            transform: translate(50%, -50%);
-            width: 200%;
-            height: 200%;
-            transition: top 350ms 700ms cubic-bezier(0.23, 1, 0.32, 1),  
-                        right 350ms 700ms cubic-bezier(0.23, 1, 0.32, 1),
-                        transform 250ms 700ms ease,
-                        width 750ms 1000ms cubic-bezier(0.23, 1, 0.32, 1),
-                        height 750ms 1000ms cubic-bezier(0.23, 1, 0.32, 1);
-          }
+                </div> <!-- end masonry -->
+            </div> <!-- end col-full -->
+        </div> <!-- end works-content -->
 
-          .nav ul{
-            position: absolute;
-            top: 50%;
-            left: 0;
-            display: block;
-            width: 100%;
-            padding: 0;
-            margin: 0;
-            z-index: 6;
-            text-align: center;
-            transform: translateY(-50%);
-            list-style: none;
-          }
-          .nav ul li{
-            position: relative;
-            display: block;
-            width: 100%;
-            padding: 0;
-            margin: 10px 0;
-            text-align: center;
-            list-style: none;
-            pointer-events: none;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(30px);
-            transition: all 250ms linear;
-          }
-          .nav ul li:nth-child(1){
-            transition-delay: 200ms;
-          }
-          .nav ul li:nth-child(2){
-            transition-delay: 150ms;
-          }
-          .nav ul li:nth-child(3){
-            transition-delay: 100ms;
-          }
-          .nav ul li:nth-child(4){
-            transition-delay: 50ms;
-          }
-          .nav ul li a{
-            font-family: 'Montserrat', sans-serif;
-            font-size: 9vh;
-            text-transform: uppercase;
-            line-height: 1.2;
-            font-weight: 800;
-            display: inline-block;
-            position: relative;
-            color: #ececee;
-            transition: all 250ms linear;
-          }
-          .nav ul li a:hover{
-            text-decoration: none;
-            color: #ffeba7;
-          }
-          .nav ul li a:after{
-            display: block;
-            position: absolute;
-            top: 50%;
-            content: '';
-            height: 2vh;
-            margin-top: -1vh;
-            width: 0;
-            left: 0;
-            background-color: #333333;
-            opacity: 0.8;
-            transition: width 250ms linear;
-          }
-          .nav ul li a:hover:after{
-            width: 100%;
-          }
-          .menu-icon:checked ~ .nav  ul li {
-            pointer-events: auto;
-            visibility: visible;
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 350ms ease,
-                        transform 250ms ease;
-          }
-          .menu-icon:checked ~ .nav ul li:nth-child(1){
-            transition-delay: 1400ms;
-          }
-          .menu-icon:checked ~ .nav ul li:nth-child(2){
-            transition-delay: 1480ms;
-          }
-          .menu-icon:checked ~ .nav ul li:nth-child(3){
-            transition-delay: 1560ms;
-          }
-          .menu-icon:checked ~ .nav ul li:nth-child(4){
-            transition-delay: 1640ms;
-          }
+    </section> <!-- end s-works -->
 
-          .logo {
-            position: absolute;
-            top: 5px;
-            left: 50px;
-            display: block;
-            z-index: 11;
-            transition: all 250ms linear;
+    <!-- clients
+    ================================================== -->
+    <section id="clients" class="s-clients">
 
+        <div class="row section-header" data-aos="fade-up">
+            <div class="col-full">
+                <h3 class="subhead">Our Clients</h3>
+                <h1 class="display-2">AgencyFluent has been honored to
+                partner up with these clients</h1>
+            </div>
+        </div> <!-- end section-header -->
 
-          }
-          .logo img {
-            height: 8.5rem;
-            width: auto;
-            display: block;
-          }
-          @media screen and (max-width: 991px) {
-            .menu-icon:checked + label,
-            .menu-icon:not(:checked) + label{
-              right: 55px;
-            }
-            .logo {
-              left: 30px;
-            }
-            .nav{
-              right: 30px;
-            }
-            h1{
-              font-size: 9vw;
-              -webkit-text-stroke: 2px transparent;
-              text-stroke: 2px transparent;
-              -webkit-text-fill-color: #ffeba7;
-              text-fill-color: #ffeba7;
-              color: #ffeba7;
-            }
-            .nav ul li a{
-              font-size: 8vh;
-            }
-          }
+        <div class="row clients-outer" data-aos="fade-up">
+            <div class="col-full">
+                <div class="clients">
+                    
+                    <a href="#0" title="" class="clients__slide"><img src="static/images/clients/d1.png" /></a>
+                    <a href="#0" title="" class="clients__slide"><img src="static/images/clients/d2.png" /></a>
+                    <a href="#0" title="" class="clients__slide"><img src="static/images/clients/d3.png" /></a>
+                    <a href="#0" title="" class="clients__slide"><img src="static/images/clients/d4.png" /></a>
+                    <a href="#0" title="" class="clients__slide"><img src="static/images/clients/d5.png" /></a>
+                    <a href="#0" title="" class="clients__slide"><img src="static/images/clients/d6.png" /></a>
+                    <a href="#0" title="" class="clients__slide"><img src="static/images/clients/d7.png" /></a>
+                     
+                </div> <!-- end clients -->
+            </div> <!-- end col-full -->
+        </div> <!-- end clients-outer -->
 
-          .zoom {
-              padding: 50px;
-              transition: transform .2s; /* Animation */
-              width: 0px;
-              height: 0px;
-            }
+        <div class="row clients-testimonials" data-aos="fade-up">
             
-            .zoom:hover {
-              transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-            }
+                
+            </div> <!-- end col-full -->
+        </div> <!-- end client-testimonials -->
 
-    </style>   
-    <script>
-      $(".counter").counterUp({
-        delay: 10,
-        
-        time: 2000
-      });
-      $(".counter").addClass('animated fadeInDownBig');
-      
-    </script>
-    </body>
+    </section> <!-- end s-clients -->
+
+
+    <!-- contact
+    ================================================== -->
+    <section id="contact" class="s-contact">
+
+        <div class="overlay"></div>
+        <div class="contact__line"></div>
+
+        <div class="row section-header" data-aos="fade-up">
+            <div class="col-full">
+                <h3 class="subhead">Contact Us</h3>
+                <h1 class="display-2 display-2--light">Reach out for a new project or just say hello👋</h1>
+            </div>
+        </div>
+
+        <div class="row contact-content" data-aos="fade-up">
+            
+            <div class="contact-primary">
+
+                <h3 class="h6">Send Us A Message</h3>
+
+                <form name="contactForm" id="Create_lead" method='POST' action="" novalidate="novalidate">
+                    {% csrf_token %}
+                    <fieldset>
+    
+                    <div class="form-field">
+                        <input name="contactName" type="text" id="name" placeholder="Your Name" value="" minlength="2" required="" aria-required="true" class="full-width">
+                    </div>
+                    <div class="form-field">
+                        <input name="contactEmail" type="email" id="email" placeholder="Your Email" value="" required="" aria-required="true" class="full-width">
+                    </div>
+                    <div class="form-field">
+                        <input name="contactSubject" type="text" id="subject" placeholder="Subject" value="" class="full-width">
+                    </div>
+                    <div class="form-field">
+                        <textarea name="contactMessage" id="body" placeholder="Your Message" rows="10" cols="50" required="" aria-required="true" class="full-width"></textarea>
+                    </div>
+                    <div class="form-field">
+                        <button type='submit' value='Create' class="full-width btn--primary">Submit</button>
+                        <div class="submit-loader">
+                            <div class="text-loader">Sending...</div>
+                            <div class="s-loader">
+                                <div class="bounce1"></div>
+                                <div class="bounce2"></div>
+                                <div class="bounce3"></div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    </fieldset>
+                </form>
+
+                <!-- contact-warning -->
+                <div class="message-warning">
+                    Something went wrong. Please try again.
+                </div> 
+            
+                <!-- contact-success -->
+                <div class="message-success">
+                    Your message was sent, thank you!<br>
+                </div>
+
+            </div> <!-- end contact-primary -->
+
+            <div class="contact-secondary">
+                <div class="contact-info">
+
+                    <h3 class="h6 hide-on-fullwidth">Contact Info</h3>
+
+                    <div class="cinfo">
+                        <h5>Where to Find Us</h5>
+                        <p>
+                            1600 Amphitheatre Parkway<br>
+                            Mountain View, CA<br>
+                            94043 US
+                        </p>
+                    </div>
+
+                    <div class="cinfo">
+                        <h5>Email Us At</h5>
+                        <p>
+                            contact@glintsite.com<br>
+                            info@glintsite.com
+                        </p>
+                    </div>
+
+                    <div class="cinfo">
+                        <h5>Call Us At</h5>
+                        <p>
+                            Phone: (+63) 555 1212<br>
+                            Mobile: (+63) 555 0100<br>
+                            Fax: (+63) 555 0101
+                        </p>
+                    </div>
+
+                    <ul class="contact-social">
+                        <li>
+                            <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
+                        </li>
+                    </ul> <!-- end contact-social -->
+
+                </div> <!-- end contact-info -->
+            </div> <!-- end contact-secondary -->
+
+        </div> <!-- end contact-content -->
+
+    </section> <!-- end s-contact -->
+
+
+    <!-- footer
+    ================================================== -->
+    <footer>
+
+        <div class="row footer-main">
+
+            <div class="col-six tab-full left footer-desc">
+
+                <div class="site-logo" style="width:5em; height:5em; margin-bottom:1em;">
+                    <img src="static/images/31.png" >
+                </div>
+                Proin eget tortor risus. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Nulla porttitor accumsan tincidunt. Nulla porttitor accumsan tincidunt. Quaerat voluptas autem necessitatibus vitae aut.
+
+            </div>
+
+            <div class="col-six tab-full right footer-subscribe">
+
+                <h4>Get Notified</h4>
+                <p>Quia quo qui sed odit. Quaerat voluptas autem necessitatibus vitae aut non alias sed quia. Ut itaque enim optio ut excepturi deserunt iusto porro.</p>
+
+                <div class="subscribe-form">
+                    <form id="mc-form" class="group" novalidate="true">
+                        <input type="email" value="" name="EMAIL" class="email" id="mc-email" placeholder="Email Address" required="">
+                        <input type="submit" name="subscribe" value="Subscribe">
+                        <label for="mc-email" class="subscribe-message"></label>
+                    </form>
+                </div>
+
+            </div>
+
+        </div> <!-- end footer-main -->
+
+        <div class="row footer-bottom">
+
+            <div class="col-twelve">
+                <div class="copyright">
+                    <span>© Copyright Glint 2017</span> 
+                    <span>Site Template by <a href="https://www.colorlib.com/">Colorlib</a></span>	
+                </div>
+
+                <div class="go-top">
+                    <a class="smoothscroll" title="Back to Top" href="#top"><i class="icon-arrow-up" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+        </div> <!-- end footer-bottom -->
+
+    </footer> <!-- end footer -->
+
+
+    <!-- photoswipe background
+    ================================================== -->
+    <div aria-hidden="true" class="pswp" role="dialog" tabindex="-1">
+
+        <div class="pswp__bg"></div>
+        <div class="pswp__scroll-wrap">
+
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar">
+                    <div class="pswp__counter"></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button> <button class="pswp__button pswp__button--share" title=
+                    "Share"></button> <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button> <button class="pswp__button pswp__button--zoom" title=
+                    "Zoom in/out"></button>
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button> <button class="pswp__button pswp__button--arrow--right" title=
+                "Next (arrow right)"></button>
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div> <!-- end photoSwipe background -->
+
+
+    <!-- preloader
+    ================================================== -->
+    <div id="preloader">
+        <div id="loader">
+            <div class="line-scale-pulse-out">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Java Script
+    ================================================== -->
+    <script src="static/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src="static/js/plugins.js" type="text/javascript"></script>
+    <script src="static/js/main.js" type="text/javascript"></script>
+
+</body>
+
 </html>
